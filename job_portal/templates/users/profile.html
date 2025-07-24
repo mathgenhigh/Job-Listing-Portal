@@ -45,7 +45,11 @@
           </p>
           <p class="text-xl text-gray-600">Email: {{ user.email }}</p>
           <p class="text-gray-600 text-xl">
+            {% if user.profile %}
             Location: {{ user.profile.location|default:"Not set" }}
+            {% else %}
+            Location: Not set
+            {% endif %}
           </p>
         </div>
       </div>
@@ -95,11 +99,11 @@
                         hover:bg-red-600 transition focus:outline-none focus:ring-2 focus:ring-red-300">
                 Delete Account
             </a>
-            <button type="submit"
+            <a href="{% url 'edit_profile' %}"
                     class="w-full md:w-auto px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-lg
                             hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 active:scale-95 transition">
                 Update Profile
-            </button>
+            </a>
           </div>
         </div>
       </form>

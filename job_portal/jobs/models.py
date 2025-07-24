@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings 
+from users.models import CustomUser
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -37,6 +38,7 @@ class Application(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png', blank=True)
     
     def __str__(self):
         return self.user.username

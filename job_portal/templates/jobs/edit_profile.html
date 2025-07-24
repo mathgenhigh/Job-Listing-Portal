@@ -1,22 +1,106 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load widget_tweaks %}
 
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto p-6 bg-white rounded shadow">
-    <h2 class="text-2xl font-bold mb-6">Edit Your Profile</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="mb-4">
-            <label class="block font-medium mb-1">{{ field.label_tag }}</label>
-            {{ field|add_class:"w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500" }}
-            <p class="text-sm text-red-600">{{ field.errors }}</p>
-        </div>
-        {% endfor %}
-        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Save Changes</button>
-    </form>
+<div class="max-w-xl mx-auto p-6 sm:p-8 lg:max-w-2xl bg-white dark:bg-gray-800 rounded-xl shadow-lg mt-10">
+  <h2 class="text-3xl sm:text-4xl font-extrabold mb-6 text-center text-indigo-600 dark:text-indigo-400 tracking-tight">
+    Edit Your Profile
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <!-- Avatar Upload / Preview -->
+    <div class="flex flex-col items-center mb-8">
+      <div
+        id="avatarDropzone"
+        class="w-32 h-32 mb-4 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center overflow-hidden cursor-pointer hover:border-indigo-400 transition"
+      >
+        <img
+          id="avatarPreview"
+          src="{% if user.avatar.url %}{{ user.avatar.url }}{% else %}/media/placeholder.jpg{% endif %}"
+          alt="Avatar preview"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <input
+        type="file"
+        id="{{ form.avatar.id_for_label }}"
+        name="{{ form.avatar.name }}"
+        accept="image/png,image/jpeg"
+        class="hidden"
+      />
+
+      <p class="text-sm text-gray-500 dark:text-gray-400">JPG or PNG — max 2MB</p>
+      {% if form.avatar.errors %}
+        <p class="text-sm text-red-500 mt-2">{{ form.avatar.errors }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Resume Upload Card -->
+    <div class="mb-6">
+      <label
+        for="{{ form.resume.id_for_label }}"
+        class="block text-lg font-medium mb-2 text-gray-700 dark:text-gray-300"
+      >
+        Resume
+      </label>
+      <div
+        class="p-4 border-2 border-dashed border-gray-700 dark:border-gray-600 rounded-lg text-center hover:border-indigo-400 transition cursor-pointer"
+        onclick="document.getElementById('{{ form.resume.id_for_label }}').click()"
+      >
+        <p class="text-gray-500 dark:text-gray-400">
+          Drag & drop your resume here, or click to select (PDF, DOCX)
+        </p>
+      </div>
+
+      <input
+        type="file"
+        id="{{ form.resume.id_for_label }}"
+        name="{{ form.resume.name }}"
+        accept=".pdf,.docx"
+        class="hidden"
+      />
+
+      {% if form.resume.errors %}
+        <p class="text-sm text-red-500 mt-2">{{ form.resume.errors }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+      <button
+        type="submit"
+        class="flex-1 bg-indigo-600 text-white px-6 py-2 rounded shadow hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition"
+      >
+        Save Changes
+      </button>
+      <a
+        href="{% url 'profile' %}"
+        class="flex-1 text-center bg-gray-200 text-gray-700 px-6 py-2 rounded shadow hover:bg-gray-300 focus:ring-4 focus:ring-gray-200 transition"
+      >
+        Cancel
+      </a>
+    </div>
+  </form>
 </div>
+
+<script>
+  (function() {
+    const dropzone = document.getElementById('avatarDropzone');
+    const inputFile = document.getElementById('{{ form.avatar.id_for_label }}');
+    const previewImg = document.getElementById('avatarPreview');
+
+    dropzone.addEventListener('click', () => inputFile.click());
+    inputFile.addEventListener('change', e => {
+      const [file] = e.target.files;
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+      }
+    });
+  })();
+</script>
 {% endblock %}

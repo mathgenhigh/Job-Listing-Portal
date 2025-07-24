@@ -107,8 +107,14 @@ def edit_profile(request):
     profile = request.user.profile
     form = ProfileForm(request.POST or None, request.FILES or None, instance=profile)
     
-    if form.is_valid():
-        form.save()
-        return redirect('dashboard')
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+    
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
 
     return render(request, 'jobs/edit_profile.html', {'form': form})

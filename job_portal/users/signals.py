@@ -5,5 +5,5 @@ from jobs.models import Profile
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created and instance.role == 'job_seeker':
+    if created:
         Profile.objects.create(user=instance)
