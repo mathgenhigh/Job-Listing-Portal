@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white rounded-xl shadow mt-10 text-center">
+    <h2 class="text-2xl font-semibold text-red-600 mb-4">Confirm Account Deletion</h2>
+    <p class="mb-6 text-gray-700">Are you sure you want permanently delete your account? This action cannot be undone.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'profile' %}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</a>
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %}Home - Job Portal{% endblock %}
+
+{% block content %}
+<section class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20 px-6 text-center">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Your Dream Job Today</h1>
+    <p class="text-lg md:text-xl mb-6">Browse job offers, apply easily, and manage your career in one place.</p>
+    <a href="{% url 'job_list' %}" class="inline-block bg-white text-indigo-600 font-semibold py-3 px-6 rounded shadow hover:bg-gray-100 transition">Browse Jobs</a>
+  </div>
+</section>
+
+<section class="bg-gray-100 py-10 px-6 shadow-inner">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-2xl font-bold mb-8">Search for a Job</h2>
+    <form action="{% url 'job_list' %}" method="get" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+      <input type="text" name="q" placeholder="Job title or keyword" class="border rounded px-4 py-3" />
+      <input type="text" name="location" placeholder="Location" class="border rounded px-4 py-3" />
+      <button type="submit" class="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition">Search</button>
+    </form>
+  </div>
+</section>
+
+<section class="w-full bg-gray-100 py-12 px-6">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-2xl font-bold mb-8">Explore Popular Categories</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <a href="#" class="bg-white shadow rounded p-4 hover:bg-indigo-50 transition">Engineering</a>
+      <a href="#" class="bg-white shadow rounded p-4 hover:bg-indigo-50 transition">Design</a>
+      <a href="#" class="bg-white shadow rounded p-4 hover:bg-indigo-50 transition">Marketing</a>
+      <a href="#" class="bg-white shadow rounded p-4 hover:bg-indigo-50 transition">Remote Jobs</a>
+    </div>
+  </div>
+</section>
+
+<section class="py-12 px-6 bg-gray-100">
+  <h2 class="text-2xl font-bold text-center mb-8">Recent Job Listings</h2>
+  <div class="max-w-5xl mx-auto space-y-4">
+    {% for job in recent_jobs %}
+    <div class="bg-white rounded-lg shadow p-6 flex justify-between items-center">
+      <div>
+        <h3 class="text-lg font-semibold">{{ job.title }}</h3>
+        <p class="text-sm text-gray-500">{{ job.company }} — {{ job.location }}</p>
+      </div>
+      <a href="{% url 'job_detail' job.id %}" class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">View</a>
+    </div>
+    {% empty %}
+    <p class="text-xl text-center text-gray-500">No jobs posted yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="py-16 px-6 bg-indigo-600 text-white text-center">
+  <h2 class="text-2xl font-bold mb-4">Are you hiring?</h2>
+  <p class="text-xl mb-6">Post a job and find the right candidates quickly.</p>
+  <a href="{% url 'job_post' %}" class="bg-white text-indigo-600 py-3 px-6 rounded font-semibold hover:bg-gray-100">Post a Job</a>
+</section>
+{% endblock %}

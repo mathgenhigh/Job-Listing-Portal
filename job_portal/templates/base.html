@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Job Portal{% endblock %}</title>
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet" />
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <nav class="bg-white shadow-md p-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="{% url 'home' %}" class="text-2xl font-bold text-indigo-600 hover:underline">Job Portal</a
+        >
+        <ul class="flex space-x-4">
+          <li>
+            <a href="{% url 'job_list' %}" class="text-xl hover:text-indigo-500"
+              >Jobs</a
+            >
+          </li>
+          {% if user.is_authenticated and user.role == 'job_seeker' %}
+          <li>
+            <a href="{% url 'profile' %}" class="text-xl hover:text-gray-500">Profile</a>
+          </li>
+          <li>
+            <a href="{% url 'dashboard' %}" class="text-xl hover:text-indigo-500"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="text-xl hover:text-red-600">Logout</a>
+          </li>
+          {% elif user.role == 'employer' %}
+          <li>
+            <a href="{% url 'profile' %}" class="text-xl hover:text-gray-500">Profile</a>
+          </li>
+          <li>
+            <a href="{% url 'dashboard' %}" class="text-xl hover:text-indigo-500"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="{% url 'job_post' %}"
+            class="text-xl hover:text-gray-500">Post a Job</a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="text-xl hover:text-red-600">Logout</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{% url 'login' %}" class="text-xl hover:text-indigo-500">Login</a>
+          </li>
+          <li>
+            <a href="{% url 'register' %}" class="text-xl hover:text-indigo-500"
+              >Sign Up</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <main class="max-w mx-auto py-8 px-4">
+      {% block content %}
+      <!-- Page-specific content -->
+      {% endblock %}
+    </main>
+
+    <footer class="bg-white shadow-inner text-center py-4 mt-8">
+      <p class="text-gray-600 text-sm">
+        &copy; 2025 Job Portal. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Applications{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-6">Applications for {{ job.title }}</h2>
+
+    {% if applications %}
+    <ul class="space-y-4">
+        {% for app in applications%}
+        <li class="border p-4 rounded flex justify-between items-center">
+            <div>
+                <p><strong>{{ app.user.username }}</strong> - {{ app.status }}</p>
+                {% if app.resume %}
+                <a href="{{ app.resume.url }}" class="text-indigo-600 hover:underline">Download Resume</a>
+                {% endif %}
+            </div>
+            <form action="{% url 'update_application_status' app_id %}" method="post">
+                {% csrf_token %}
+                <select name="status" class="border rounded px-2 py-1">
+                    <option value="pending" {% if app.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="accepted" {% if app.status == 'accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="rejected" {% if app.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+                <button class="ml-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">Update</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No applications yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
