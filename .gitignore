@@ -1,5 +1,5 @@
 venv/
 __pycache__/
 migrations/
-db.sqlite3
+job_portal/job_portal/db.sqlite3
 manage.py
